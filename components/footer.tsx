@@ -197,44 +197,7 @@ export default function Footer() {
 
 
 
-        {/* Payment Partners & Security Trust Section */}
-        <div className="border-t border-[#510c74]/20 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-white/60 p-4 rounded-2xl border border-[#510c74]/15">
-            <div className="flex items-center space-x-3 text-center md:text-left">
-              <div className="w-10 h-10 rounded-full bg-[#510c74]/10 flex items-center justify-center flex-shrink-0 text-[#510c74]">
-                <Shield className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="font-semibold text-sm text-[#240334] flex items-center gap-1.5 justify-center md:justify-start">
-                  <span>100% Secure Payments</span>
-                  <span className="text-[10px] font-bold bg-[#510c74] text-white px-2 py-0.5 rounded-full uppercase">Powered by Razorpay</span>
-                </p>
-                <p className="text-xs text-gray-600">256-bit bank-grade encryption • UPI, Cards, NetBanking & COD</p>
-              </div>
-            </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              <span className="px-2.5 py-1 text-xs font-semibold bg-white rounded-md border border-[#510c74]/20 text-[#240334] shadow-xs">
-                ⚡ UPI / QR
-              </span>
-              <span className="px-2.5 py-1 text-xs font-semibold bg-white rounded-md border border-[#510c74]/20 text-[#240334] shadow-xs">
-                💳 Visa
-              </span>
-              <span className="px-2.5 py-1 text-xs font-semibold bg-white rounded-md border border-[#510c74]/20 text-[#240334] shadow-xs">
-                💳 Mastercard
-              </span>
-              <span className="px-2.5 py-1 text-xs font-semibold bg-white rounded-md border border-[#510c74]/20 text-[#240334] shadow-xs">
-                🇮🇳 RuPay
-              </span>
-              <span className="px-2.5 py-1 text-xs font-semibold bg-white rounded-md border border-[#510c74]/20 text-[#240334] shadow-xs">
-                🏦 Net Banking
-              </span>
-              <span className="px-2.5 py-1 text-xs font-semibold bg-white rounded-md border border-[#510c74]/20 text-[#240334] shadow-xs">
-                💵 Cash on Delivery
-              </span>
-            </div>
-          </div>
-        </div>
 
         {/* Bottom bar */}
         <div className="border-t border-[#510c74]/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
