@@ -18,6 +18,11 @@ export const metadata: Metadata = {
   title: 'Mariyae Kalin - Premium Product Variety Collection',
   description: 'Exquisite product variety for every occasion. Crafting timeless elegance since 1998.',
   generator: 'Next.js',
+  icons: {
+    icon: '/mariyae_dark_wbg.png',
+    shortcut: '/mariyae_dark_wbg.png',
+    apple: '/mariyae_dark_wbg.png',
+  },
 }
 
 export default function RootLayout({
