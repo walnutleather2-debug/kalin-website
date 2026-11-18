@@ -19,11 +19,11 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center -ml-32">
             <Image
-              src="/mariyae_without bg.png"
-              alt="Mariyae Kalin Logo"
-              width={150}
-              height={50}
-              className="h-10 w-auto object-contain"
+              src="/bha-kaleen2-removebg-preview.png"
+              alt="Bhadohi Kaleen Logo"
+              width={160}
+              height={103}
+              className="h-12 w-auto object-contain"
               priority
             />
           </Link>

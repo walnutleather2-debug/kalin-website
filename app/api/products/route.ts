@@ -16,8 +16,10 @@ export async function GET(request: NextRequest) {
     const minPrice = searchParams.get('minPrice') ? parseFloat(searchParams.get('minPrice')!) : 0
     const maxPrice = searchParams.get('maxPrice') ? parseFloat(searchParams.get('maxPrice')!) : 1000000
     const sortBy = searchParams.get('sortBy') || 'newest'
+    const search = searchParams.get('search')
+    const includeInactive = searchParams.get('includeInactive') === 'true'
 
-    const filter: any = { isActive: { $ne: false } }
+    const filter: any = includeInactive ? {} : { isActive: { $ne: false } }
 
     if (category) filter.category = category
     if (subCategory) filter.subCategory = subCategory
@@ -27,13 +29,32 @@ export async function GET(request: NextRequest) {
       filter.price = { $gte: minPrice, $lte: maxPrice }
     }
 
+    if (search && search.trim()) {
+      const trimmed = search.trim()
+      const searchRegex = new RegExp(trimmed, 'i')
+      const orConditions: any[] = [
+        { name: { $regex: searchRegex } },
+        { category: { $regex: searchRegex } },
+        { subCategory: { $regex: searchRegex } },
+        { mainCategory: { $regex: searchRegex } },
+        { description: { $regex: searchRegex } }
+      ]
+      if (/^[0-9a-fA-F]{24}$/.test(trimmed)) {
+        orConditions.push({ _id: trimmed })
+      }
+      filter.$or = orConditions
+    }
+
     let sortOption: any = { createdAt: -1 }
     if (sortBy === 'price-low') sortOption = { price: 1 }
     else if (sortBy === 'price-high') sortOption = { price: -1 }
     else if (sortBy === 'rating') sortOption = { rating: -1 }
+    else if (sortBy === 'oldest') sortOption = { createdAt: 1 }
+    else if (sortBy === 'name-asc') sortOption = { name: 1 }
+    else if (sortBy === 'name-desc') sortOption = { name: -1 }
 
     const query = Product.find(filter)
-      .select('name price originalPrice offerPercentage isOnSale images category subCategory isNew rating reviews')
+      .select('name price originalPrice offerPercentage isOnSale images category mainCategory subCategory isNew rating reviews isActive isOutOfStock quantity createdAt description')
       .sort(sortOption)
 
     if (limit > 0) {

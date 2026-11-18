@@ -3,5 +3,5 @@
 import ComingSoon from "@/components/coming-soon"
 
 export default function BlogPage() {
-    return <ComingSoon title="Mariyae Journal" />
+    return <ComingSoon title="Bhadohi Kaleen Journal" />
 }

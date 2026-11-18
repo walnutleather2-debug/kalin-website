@@ -45,12 +45,12 @@ export default function InvoiceModal({ order, isOpen, onClose }: InvoiceModalPro
                         {/* Business Header */}
                         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
                             <div>
-                                <h1 className="text-4xl font-serif font-bold text-[#240334] mb-2">MARIYAE KALIN</h1>
+                                <h1 className="text-4xl font-serif font-bold text-[#240334] mb-2">BHADOHI KALEEN</h1>
                                 <p className="text-[#C9A34E] font-medium tracking-widest text-sm mb-4">PREMIUM PRODUCT VARIETY</p>
                                 <div className="text-sm text-gray-500 space-y-1">
                                     <p>Mumbai, Maharashtra, India</p>
                                     <p>Phone: +91 7045932672</p>
-                                    <p>Email: contact@mariyae.com</p>
+                                    <p>Email: contact@bhadohikaleen.com</p>
                                 </div>
                             </div>
                             <div className="text-right md:text-right w-full md:w-auto">
@@ -157,7 +157,7 @@ export default function InvoiceModal({ order, isOpen, onClose }: InvoiceModalPro
 
                         {/* Footer */}
                         <div className="text-center pt-12 space-y-2">
-                            <p className="text-gray-900 font-bold italic">Thank you for shopping with Mariyae Kalin!</p>
+                            <p className="text-gray-900 font-bold italic">Thank you for shopping with Bhadohi Kaleen!</p>
                             <p className="text-xs text-gray-400">This is a computer-generated invoice and does not require a physical signature.</p>
                         </div>
                     </div>

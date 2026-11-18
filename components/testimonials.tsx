@@ -14,7 +14,7 @@ export default function Testimonials() {
       role: "Fashion Designer",
       image: "/placeholder.svg?height=80&width=80&text=Sarah",
       rating: 5,
-      text: "Absolutely stunning products! The quality is exceptional and the designs are timeless. I've received so many compliments on my Mariyae Kalin pieces. The customer service is also outstanding.",
+      text: "Absolutely stunning products! The quality is exceptional and the designs are timeless. I've received so many compliments on my Bhadohi Kaleen pieces. The customer service is also outstanding.",
     },
     {
       id: 2,
@@ -22,7 +22,7 @@ export default function Testimonials() {
       role: "Business Executive",
       image: "/placeholder.svg?height=80&width=80&text=Michael",
       rating: 5,
-      text: "I bought a gift collection from Mariyae Kalin and it was perfect. The craftsmanship is incredible and my fiancée absolutely loves it. The whole experience was seamless from start to finish.",
+      text: "I bought a gift collection from Bhadohi Kaleen and it was perfect. The craftsmanship is incredible and my fiancée absolutely loves it. The whole experience was seamless from start to finish.",
     },
     {
       id: 3,
@@ -30,7 +30,7 @@ export default function Testimonials() {
       role: "Artist",
       image: "/placeholder.svg?height=80&width=80&text=Emily",
       rating: 5,
-      text: "The attention to detail in every piece is remarkable. I've been a customer for years and every purchase has exceeded my expectations. Mariyae Kalin truly understands what makes products special.",
+      text: "The attention to detail in every piece is remarkable. I've been a customer for years and every purchase has exceeded my expectations. Bhadohi Kaleen truly understands what makes products special.",
     },
   ]
 
@@ -48,7 +48,7 @@ export default function Testimonials() {
         <div className="text-center mb-12">
           <h2 className="text-4xl font-light text-gray-900 mb-4">What Our Customers Say</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Don't just take our word for it. Here's what our valued customers have to say about their Mariyae Kalin experience.
+            Don't just take our word for it. Here's what our valued customers have to say about their Bhadohi Kaleen experience.
           </p>
         </div>
 

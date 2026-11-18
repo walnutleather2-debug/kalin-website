@@ -593,7 +593,7 @@ export default function AccountPage() {
                                     price: item.price,
                                     image: item.image,
                                     category: item.category,
-                                    brand: "MARIYAE"
+                                    brand: "BHADOHI KALEEN"
                                   })
                                   toast({
                                     title: "Added to Cart",

@@ -24,13 +24,13 @@ export default function Navbar() {
         <div className="flex items-center justify-center lg:justify-between h-20 md:h-24">
           {/* Mobile Logo - Centered */}
           <div className="lg:hidden flex items-center justify-center w-full h-full">
-            <Link href="/" className="flex items-center p-0 h-full pt-4 -ml-4 md:-ml-6">
+            <Link href="/" className="flex items-center p-0 h-full pt-2 -ml-4 md:-ml-6">
               <Image
-                src="/mariyae_dark_wbg.png"
-                alt="Mariyae Kalin Logo"
-                width={220}
-                height={82}
-                className="h-full max-h-16 md:max-h-20 w-auto object-contain scale-110"
+                src="/bha-kaleen2-removebg-preview.png"
+                alt="Bhadohi Kaleen Logo"
+                width={180}
+                height={116}
+                className="h-full max-h-14 md:max-h-16 w-auto object-contain"
                 priority
               />
             </Link>
@@ -39,13 +39,13 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-20  ml-40">
             {/* Logo */}
-            <Link href="/" className="flex items-center flex-shrink-0 p-0 h-full pt-4 -ml-8 lg:-ml-20">
+            <Link href="/" className="flex items-center flex-shrink-0 p-0 h-full pt-2 -ml-8 lg:-ml-20">
               <Image
-                src="/mariyae_dark_wbg.png"
-                alt="Mariyae Kalin Logo"
+                src="/bha-kaleen2-removebg-preview.png"
+                alt="Bhadohi Kaleen Logo"
                 width={200}
-                height={75}
-                className="h-full max-h-14 lg:max-h-16 xl:max-h-20 w-auto object-contain scale-110"
+                height={128}
+                className="h-full max-h-14 lg:max-h-16 xl:max-h-20 w-auto object-contain"
                 priority
               />
             </Link>

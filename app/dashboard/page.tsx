@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { LayoutDashboard, Package, Plus, Edit, Trash2, Eye, Search, Filter, MoreHorizontal, Lock, User, Image as ImageIcon, FileText } from "lucide-react"
+import { LayoutDashboard, Package, Plus, Edit, Trash2, Eye, Search, Filter, MoreHorizontal, Lock, User, Image as ImageIcon, FileText, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, X, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -17,7 +17,7 @@ import ExcelUpload from "@/components/excel-upload"
 import InvoiceModal from "@/components/InvoiceModal"
 
 export default function DashboardPage() {
-  const { products, loading, error, createProduct, updateProduct, deleteProduct } = useProducts()
+  const { products, loading, error, createProduct, updateProduct, deleteProduct } = useProducts({ includeInactive: true })
   const { orders, loading: ordersLoading, error: ordersError, fetchOrders, updateOrder } = useOrders()
   const [activeTab, setActiveTab] = useState<'dashboard' | 'orders' | 'categories' | 'banners' | 'signature'>('dashboard')
   const [showAddForm, setShowAddForm] = useState(false)
@@ -31,6 +31,15 @@ export default function DashboardPage() {
   const [showBulkUpload, setShowBulkUpload] = useState(false)
   const [showInvoiceModal, setShowInvoiceModal] = useState(false)
   const [selectedInvoiceOrder, setSelectedInvoiceOrder] = useState<any>(null)
+
+  // Product Search and Pagination state
+  const [productSearchInput, setProductSearchInput] = useState('')
+  const [productSearchQuery, setProductSearchQuery] = useState('')
+  const [productCategoryFilter, setProductCategoryFilter] = useState('all')
+  const [productStatusFilter, setProductStatusFilter] = useState('all')
+  const [productSortBy, setProductSortBy] = useState('newest')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(10)
 
   // Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -243,6 +252,124 @@ export default function DashboardPage() {
     }
   }
 
+  // Derived unique categories for filter
+  const availableCategories = Array.from(
+    new Set(
+      products
+        .map(p => p.category)
+        .filter((c): c is string => Boolean(c && typeof c === 'string' && c.trim()))
+    )
+  ).sort()
+
+  // Filter products by search query, category, status
+  const filteredProducts = products.filter(product => {
+    // 1. Search Query filter (matches name, category, subCategory, mainCategory, ID, description)
+    if (productSearchQuery) {
+      const q = productSearchQuery.toLowerCase().trim()
+      const nameMatch = product.name?.toLowerCase().includes(q)
+      const categoryMatch = product.category?.toLowerCase().includes(q)
+      const subCategoryMatch = product.subCategory?.toLowerCase().includes(q)
+      const mainCategoryMatch = product.mainCategory?.toLowerCase().includes(q)
+      const idMatch = product._id?.toLowerCase().includes(q)
+      const descMatch = product.description?.toLowerCase().includes(q)
+
+      if (!nameMatch && !categoryMatch && !subCategoryMatch && !mainCategoryMatch && !idMatch && !descMatch) {
+        return false
+      }
+    }
+
+    // 2. Category filter
+    if (productCategoryFilter !== 'all') {
+      const catMatch = product.category === productCategoryFilter ||
+        product.mainCategory === productCategoryFilter ||
+        product.subCategory === productCategoryFilter
+      if (!catMatch) return false
+    }
+
+    // 3. Status filter
+    if (productStatusFilter === 'active' && product.isActive === false) return false
+    if (productStatusFilter === 'inactive' && product.isActive !== false) return false
+    if (productStatusFilter === 'in_stock' && product.isOutOfStock) return false
+    if (productStatusFilter === 'out_of_stock' && !product.isOutOfStock) return false
+    if (productStatusFilter === 'on_sale' && !product.isOnSale) return false
+    if (productStatusFilter === 'new' && !product.isNew) return false
+
+    return true
+  })
+
+  // Sort products
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (productSortBy === 'price-low') {
+      return (a.price || 0) - (b.price || 0)
+    }
+    if (productSortBy === 'price-high') {
+      return (b.price || 0) - (a.price || 0)
+    }
+    if (productSortBy === 'name-asc') {
+      return (a.name || '').localeCompare(b.name || '')
+    }
+    if (productSortBy === 'name-desc') {
+      return (b.name || '').localeCompare(a.name || '')
+    }
+    if (productSortBy === 'oldest') {
+      return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime()
+    }
+    // Default: newest first
+    return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+  })
+
+  // Pagination calculations
+  const totalItems = sortedProducts.length
+  const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage))
+  const validPage = Math.min(Math.max(1, currentPage), totalPages)
+  const startIndex = (validPage - 1) * itemsPerPage
+  const paginatedProducts = sortedProducts.slice(startIndex, startIndex + itemsPerPage)
+
+  const hasActiveProductFilters = Boolean(
+    productSearchQuery || productCategoryFilter !== 'all' || productStatusFilter !== 'all'
+  )
+
+  const handleProductSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    setProductSearchQuery(productSearchInput.trim())
+    setCurrentPage(1)
+  }
+
+  const handleClearProductSearch = () => {
+    setProductSearchInput('')
+    setProductSearchQuery('')
+    setProductCategoryFilter('all')
+    setProductStatusFilter('all')
+    setProductSortBy('newest')
+    setCurrentPage(1)
+  }
+
+  // Adjust page if current page exceeds total pages
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages)
+    }
+  }, [totalPages, currentPage])
+
+  // Helper for pagination page numbers with smart ellipsis
+  const getPaginationPages = () => {
+    const pages: (number | string)[] = []
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i)
+      }
+    } else {
+      if (validPage <= 4) {
+        pages.push(1, 2, 3, 4, 5, '...', totalPages)
+      } else if (validPage >= totalPages - 3) {
+        pages.push(1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages)
+      } else {
+        pages.push(1, '...', validPage - 1, validPage, validPage + 1, '...', totalPages)
+      }
+    }
+    return pages
+  }
+
   const DashboardContent = () => (
     <div className="space-y-6">
       {/* Header */}
@@ -335,10 +462,219 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* Product Search & Filter Section */}
+      <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+        <form onSubmit={handleProductSearch} className="flex flex-col md:flex-row gap-3">
+          {/* Search Input */}
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              type="text"
+              placeholder="Search products by name, category, or ID..."
+              value={productSearchInput}
+              onChange={(e) => setProductSearchInput(e.target.value)}
+              className="pl-10 pr-9 rounded-lg border-gray-300 focus:border-[#510c74]"
+            />
+            {productSearchInput && (
+              <button
+                type="button"
+                onClick={() => {
+                  setProductSearchInput('')
+                  setProductSearchQuery('')
+                  setCurrentPage(1)
+                }}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                title="Clear input"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Search Button */}
+          <Button
+            type="submit"
+            className="text-white rounded-lg shadow-sm px-5"
+            style={{ background: 'linear-gradient(90deg, #510c74, #240334)', color: '#fff4df' }}
+          >
+            <Search className="w-4 h-4 mr-2" />
+            Search
+          </Button>
+
+          {/* Category Filter */}
+          <div className="w-full md:w-44">
+            <Select
+              value={productCategoryFilter}
+              onValueChange={(val) => {
+                setProductCategoryFilter(val)
+                setCurrentPage(1)
+              }}
+            >
+              <SelectTrigger className="rounded-lg border-gray-300">
+                <SelectValue placeholder="All Categories" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                {availableCategories.map((cat) => (
+                  <SelectItem key={cat} value={cat}>
+                    {cat}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Status Filter */}
+          <div className="w-full md:w-40">
+            <Select
+              value={productStatusFilter}
+              onValueChange={(val) => {
+                setProductStatusFilter(val)
+                setCurrentPage(1)
+              }}
+            >
+              <SelectTrigger className="rounded-lg border-gray-300">
+                <SelectValue placeholder="All Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="inactive">Inactive</SelectItem>
+                <SelectItem value="in_stock">In Stock</SelectItem>
+                <SelectItem value="out_of_stock">Out of Stock</SelectItem>
+                <SelectItem value="on_sale">On Sale</SelectItem>
+                <SelectItem value="new">New</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Sort Filter */}
+          <div className="w-full md:w-40">
+            <Select
+              value={productSortBy}
+              onValueChange={(val) => {
+                setProductSortBy(val)
+                setCurrentPage(1)
+              }}
+            >
+              <SelectTrigger className="rounded-lg border-gray-300">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="newest">Newest First</SelectItem>
+                <SelectItem value="oldest">Oldest First</SelectItem>
+                <SelectItem value="price-low">Price: Low to High</SelectItem>
+                <SelectItem value="price-high">Price: High to Low</SelectItem>
+                <SelectItem value="name-asc">Name: A to Z</SelectItem>
+                <SelectItem value="name-desc">Name: Z to A</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Reset Button (only shown if filters/search applied) */}
+          {hasActiveProductFilters && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleClearProductSearch}
+              className="rounded-lg border-gray-300 text-gray-700 hover:bg-gray-100"
+              title="Reset Filters"
+            >
+              <RotateCcw className="w-4 h-4 mr-1.5" />
+              Reset
+            </Button>
+          )}
+        </form>
+
+        {/* Active Filter Badges */}
+        {hasActiveProductFilters && (
+          <div className="mt-3 pt-3 border-t border-gray-100 flex flex-wrap items-center gap-2 text-xs">
+            <span className="text-gray-500">Active filters:</span>
+            {productSearchQuery && (
+              <Badge variant="secondary" className="gap-1 pr-1 bg-purple-50 text-[#510c74] border border-[#510c74]/20">
+                Search: "{productSearchQuery}"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProductSearchInput('')
+                    setProductSearchQuery('')
+                    setCurrentPage(1)
+                  }}
+                  className="hover:bg-purple-200/50 rounded p-0.5 ml-1"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </Badge>
+            )}
+            {productCategoryFilter !== 'all' && (
+              <Badge variant="secondary" className="gap-1 pr-1 bg-purple-50 text-[#510c74] border border-[#510c74]/20">
+                Category: {productCategoryFilter}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProductCategoryFilter('all')
+                    setCurrentPage(1)
+                  }}
+                  className="hover:bg-purple-200/50 rounded p-0.5 ml-1"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </Badge>
+            )}
+            {productStatusFilter !== 'all' && (
+              <Badge variant="secondary" className="gap-1 pr-1 bg-purple-50 text-[#510c74] border border-[#510c74]/20">
+                Status: {productStatusFilter.replace('_', ' ')}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProductStatusFilter('all')
+                    setCurrentPage(1)
+                  }}
+                  className="hover:bg-purple-200/50 rounded p-0.5 ml-1"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </Badge>
+            )}
+            <button
+              onClick={handleClearProductSearch}
+              className="text-xs text-[#510c74] hover:underline ml-1 font-medium"
+            >
+              Clear all
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Products Table */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">Recent Products</h2>
+        <div className="px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900">
+              {productSearchQuery ? 'Search Results' : 'All Products'}
+            </h2>
+            <p className="text-xs text-gray-500 mt-0.5">
+              {productSearchQuery
+                ? `Found ${totalItems} product${totalItems === 1 ? '' : 's'} matching "${productSearchQuery}"`
+                : `Total ${totalItems} product${totalItems === 1 ? '' : 's'} available`}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-500">Show:</span>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value))
+                setCurrentPage(1)
+              }}
+              className="h-8 text-xs bg-white border border-gray-300 rounded-md px-2 focus:outline-none focus:ring-1 focus:ring-[#510c74]"
+            >
+              <option value={10}>10 per page</option>
+              <option value={20}>20 per page</option>
+              <option value={50}>50 per page</option>
+              <option value={100}>100 per page</option>
+            </select>
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -364,25 +700,47 @@ export default function DashboardPage() {
             <tbody className="bg-white divide-y divide-gray-200">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-4 text-center" style={{ color: '#240334', opacity: 0.7 }}>
-                    Loading products...
+                  <td colSpan={5} className="px-6 py-12 text-center" style={{ color: '#240334', opacity: 0.7 }}>
+                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#510c74] mb-2"></div>
+                    <p className="text-sm">Loading products...</p>
                   </td>
                 </tr>
               ) : error ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-4 text-center" style={{ color: '#240334' }}>
+                  <td colSpan={5} className="px-6 py-8 text-center text-red-500">
                     Error: {error}
                   </td>
                 </tr>
-              ) : products.length === 0 ? (
+              ) : paginatedProducts.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-4 text-center" style={{ color: '#240334', opacity: 0.7 }}>
-                    No products found
+                  <td colSpan={5} className="px-6 py-12 text-center">
+                    <Package className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                    <p className="text-base font-medium text-gray-700">No products found</p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {hasActiveProductFilters
+                        ? "Try adjusting your search criteria or filters to find what you're looking for."
+                        : "No products available in your catalog."}
+                    </p>
+                    {hasActiveProductFilters && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleClearProductSearch}
+                        className="mt-4 rounded-lg border-gray-300 text-[#510c74]"
+                      >
+                        <RotateCcw className="w-4 h-4 mr-1.5" />
+                        Clear Search & Filters
+                      </Button>
+                    )}
                   </td>
                 </tr>
               ) : (
-                products.slice(0, 10).map((product) => (
-                  <tr key={product._id} style={{ borderColor: '#d1b2e0' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#d1b2e0' }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent' }}>
+                paginatedProducts.map((product) => (
+                  <tr
+                    key={product._id}
+                    className="border-b transition-colors hover:bg-purple-50/40"
+                    style={{ borderColor: '#d1b2e0' }}
+                  >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="h-10 w-10 flex-shrink-0">
@@ -394,7 +752,7 @@ export default function DashboardPage() {
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium" style={{ color: '#240334' }}>{product.name}</div>
-                          <div className="text-sm" style={{ color: '#240334', opacity: 0.6 }}>ID: {product._id.slice(-8)}</div>
+                          <div className="text-xs font-mono" style={{ color: '#240334', opacity: 0.6 }}>ID: {product._id.slice(-8)}</div>
                         </div>
                       </div>
                     </td>
@@ -424,7 +782,7 @@ export default function DashboardPage() {
                           </span>
                         )}
                         {product.isActive === false && (
-                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full" style={{ backgroundColor: '#d1b2e0', color: '#240334', opacity: 0.5 }}>
+                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full" style={{ backgroundColor: '#e2e8f0', color: '#64748b' }}>
                             INACTIVE
                           </span>
                         )}
@@ -436,6 +794,7 @@ export default function DashboardPage() {
                           onClick={() => handleEditProduct(product)}
                           className="p-1 rounded transition-colors"
                           style={{ color: '#240334' }}
+                          title="Edit Product"
                           onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#d1b2e0' }}
                           onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent' }}
                         >
@@ -443,9 +802,9 @@ export default function DashboardPage() {
                         </button>
                         <button
                           onClick={() => handleDeleteProduct(product._id)}
-                          className="p-1 rounded transition-colors"
-                          style={{ color: '#240334' }}
-                          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#d1b2e0' }}
+                          className="p-1 rounded transition-colors text-red-600 hover:text-red-800"
+                          title="Delete Product"
+                          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#fee2e2' }}
                           onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent' }}
                         >
                           <Trash2 className="w-4 h-4" />
@@ -456,6 +815,7 @@ export default function DashboardPage() {
                           rel="noopener noreferrer"
                           className="p-1 rounded transition-colors"
                           style={{ color: '#240334' }}
+                          title="View Details"
                           onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#d1b2e0' }}
                           onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent' }}
                         >
@@ -468,6 +828,88 @@ export default function DashboardPage() {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Pagination Bar */}
+        <div className="px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50/50">
+          {/* Summary */}
+          <div className="text-sm text-gray-600">
+            Showing <span className="font-semibold text-gray-900">{totalItems > 0 ? startIndex + 1 : 0}</span> to{' '}
+            <span className="font-semibold text-gray-900">{Math.min(startIndex + itemsPerPage, totalItems)}</span> of{' '}
+            <span className="font-semibold text-gray-900">{totalItems}</span> products
+          </div>
+
+          {/* Page Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center space-x-1">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(1)}
+                disabled={validPage === 1}
+                className="h-8 w-8 p-0"
+                title="First Page"
+              >
+                <ChevronsLeft className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={validPage === 1}
+                className="h-8 px-2.5 text-xs"
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Prev
+              </Button>
+
+              {getPaginationPages().map((page, idx) => {
+                if (page === '...') {
+                  return (
+                    <span key={`ellipsis-${idx}`} className="px-2 text-gray-400 text-xs">
+                      ...
+                    </span>
+                  )
+                }
+                const isCurrent = page === validPage
+                return (
+                  <button
+                    key={`page-${page}`}
+                    onClick={() => setCurrentPage(Number(page))}
+                    className={`h-8 min-w-[32px] px-2 text-xs font-medium rounded-md transition-colors ${
+                      isCurrent
+                        ? 'text-white shadow-sm'
+                        : 'text-gray-700 bg-white border border-gray-200 hover:bg-gray-100'
+                    }`}
+                    style={isCurrent ? { backgroundColor: '#510c74' } : {}}
+                  >
+                    {page}
+                  </button>
+                )
+              })}
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={validPage === totalPages}
+                className="h-8 px-2.5 text-xs"
+              >
+                Next
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={validPage === totalPages}
+                className="h-8 w-8 p-0"
+                title="Last Page"
+              >
+                <ChevronsRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>

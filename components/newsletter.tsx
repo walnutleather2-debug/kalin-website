@@ -34,7 +34,7 @@ export default function Newsletter() {
         {isSubscribed ? (
           <div className="bg-white bg-opacity-20 rounded-lg p-6 max-w-md mx-auto">
             <div className="text-white text-lg font-medium">✨ Thank you for subscribing! ✨</div>
-            <p className="text-white opacity-90 mt-2">Welcome to the Mariyae Kalin family!</p>
+            <p className="text-white opacity-90 mt-2">Welcome to the Bhadohi Kaleen family!</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="max-w-md mx-auto">

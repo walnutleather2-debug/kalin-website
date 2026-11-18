@@ -19,7 +19,7 @@ export default function AboutSection() {
             <div>
               <h2 className="text-4xl font-light text-gray-900 mb-6">Crafting Timeless Beauty Since 1998</h2>
               <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                At Mariyae Kalin, we believe that our product variety is more than just items—it's a reflection of your unique story,
+                At Bhadohi Kaleen, we believe that our product variety is more than just items—it's a reflection of your unique story,
                 your precious moments, and your personal style. For over two decades, we've been dedicated to creating
                 exquisite pieces that celebrate life's most beautiful moments.
               </p>
@@ -37,8 +37,8 @@ export default function AboutSection() {
           {/* Right image */}
           <div className="relative aspect-[4/3] rounded-2xl shadow-lg overflow-hidden flex items-center justify-center p-8 border border-[#510c74]/15" style={{ backgroundColor: '#fff4df' }}>
             <Image
-              src="/mariyae_dark_wbg.png"
-              alt="Mariyae Kalin Logo"
+              src="/bha-kaleen2-removebg-preview.png"
+              alt="Bhadohi Kaleen Logo"
               fill
               className="object-contain p-8 drop-shadow-md hover:scale-105 transition-transform duration-500"
             />

@@ -45,7 +45,7 @@ export default function HandpickedSection() {
             <div className="w-full px-4 lg:px-8">
                 <div className="text-center mb-10">
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif text-[#240334] mb-4">
-                        Mariyae Kalin's Signature Collection
+                        Bhadohi Kaleen's Signature Collection
                     </h2>
                     <p className="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">
                         An exclusive selection of our product variety, handpicked to define elegance and grace.

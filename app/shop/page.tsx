@@ -542,7 +542,7 @@ export default function ShopPage() {
                     </h3>
                   </Link>
 
-                  <p className="text-sm text-gray-600 mb-3">MARIYAE KALIN</p>
+                  <p className="text-sm text-gray-600 mb-3">BHADOHI KALEEN</p>
 
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
@@ -572,7 +572,7 @@ export default function ShopPage() {
                         originalPrice: product.originalPrice || undefined,
                         image: product.images && product.images.length > 0 ? product.images[0].url : "/placeholder.svg",
                         category: product.category,
-                        brand: "MARIYAE KALIN"
+                        brand: "BHADOHI KALEEN"
                       })}
                     >
                       <ShoppingCart className="w-4 h-4 mr-2" />

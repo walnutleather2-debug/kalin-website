@@ -138,7 +138,7 @@ export default function ProductDetail() {
       originalPrice: product.originalPrice,
       image: product.images && product.images.length > 0 ? product.images[0].url : "/placeholder.svg",
       category: product.category,
-      brand: "MARIYAE KALIN"
+      brand: "BHADOHI KALEEN"
     })
   }
 

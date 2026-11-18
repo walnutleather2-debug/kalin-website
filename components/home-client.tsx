@@ -244,7 +244,7 @@ export default function HomeClient({ banners, initialProducts, mainCategories }:
             <Navbar />
             <section className="h-16 md:h-20" style={{ backgroundColor: '#0F4F3F' }}>
                 <div className="h-full flex items-center justify-center px-4">
-                    <p className="text-[#F3EDE4] text-xs md:text-sm font-medium text-center">Welcome to Mariyae Kalin - Premium Product Variety Collection</p>
+                    <p className="text-[#F3EDE4] text-xs md:text-sm font-medium text-center">Welcome to Bhadohi Kaleen - Premium Product Variety Collection</p>
                 </div>
             </section>
 
@@ -382,8 +382,8 @@ export default function HomeClient({ banners, initialProducts, mainCategories }:
                     <div className="grid lg:grid-cols-2 gap-16 items-center">
                         <div className="relative aspect-square rounded-[3rem] overflow-hidden shadow-2xl flex items-center justify-center p-8 md:p-12 border border-[#510c74]/15" style={{ backgroundColor: '#fff4df' }}>
                             <Image 
-                                src="/mariyae_dark_wbg.png" 
-                                alt="Mariyae Kalin Logo" 
+                                src="/bha-kaleen2-removebg-preview.png" 
+                                alt="Bhadohi Kaleen Logo" 
                                 fill 
                                 className="object-contain p-8 md:p-12 drop-shadow-md hover:scale-105 transition-transform duration-500" 
                             />
@@ -391,7 +391,7 @@ export default function HomeClient({ banners, initialProducts, mainCategories }:
                         <div className="space-y-8">
                             <h2 className="text-4xl md:text-6xl font-serif text-[#240334]">Elegance in Every Detail</h2>
                             <p className="text-lg text-gray-600 leading-relaxed">
-                                At Mariyae Kalin, our product variety is not just an adornment; it's an expression of your style.
+                                At Bhadohi Kaleen, our product variety is not just an adornment; it's an expression of your style.
                                 We craft pieces that tell stories, celebrate milestones, and enhance the natural beauty of every individual.
                             </p>
                             <div className="grid grid-cols-2 gap-8 py-8 border-y border-gray-200">

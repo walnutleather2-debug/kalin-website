@@ -56,6 +56,8 @@ export interface ProductFilters {
   minPrice?: number
   maxPrice?: number
   sortBy?: string
+  search?: string
+  includeInactive?: boolean
 }
 
 export const useProducts = (initialFilters?: ProductFilters) => {
@@ -78,6 +80,8 @@ export const useProducts = (initialFilters?: ProductFilters) => {
       if (filters.minPrice) params.append('minPrice', filters.minPrice.toString())
       if (filters.maxPrice) params.append('maxPrice', filters.maxPrice.toString())
       if (filters.sortBy) params.append('sortBy', filters.sortBy)
+      if (filters.search) params.append('search', filters.search)
+      if (filters.includeInactive) params.append('includeInactive', 'true')
 
       const response = await fetch(`/api/products?${params.toString()}`)
       const data = await response.json()

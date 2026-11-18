@@ -305,9 +305,9 @@ export default function CheckoutPage() {
         key: orderData.keyId,
         amount: orderData.amount,
         currency: orderData.currency || "INR",
-        name: "Mariyae Kalin",
+        name: "Bhadohi Kaleen",
         description: `Order Payment (${state.itemCount} items)`,
-        image: "/mariyae_dark_wbg.png",
+        image: "/bha-kaleen2-removebg-preview.png",
         order_id: orderData.orderId,
         prefill: {
           name: `${formData.firstName} ${formData.lastName}`,

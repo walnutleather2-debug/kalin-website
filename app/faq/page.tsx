@@ -16,8 +16,8 @@ export default function FAQPage() {
             category: "General",
             questions: [
                 {
-                    q: "What is Mariyae Kalin?",
-                    a: "Mariyae Kalin is a premium brand offering an extensive product variety, founded in 1998. We specialize in crafting exquisite, high-quality products that blend timeless elegance with contemporary craftsmanship."
+                    q: "What is Bhadohi Kaleen?",
+                    a: "Bhadohi Kaleen is a premium brand offering an extensive product variety, founded in 1998. We specialize in crafting exquisite, high-quality products that blend timeless elegance with contemporary craftsmanship."
                 },
                 {
                     q: "Are the product pieces handcrafted?",
@@ -54,12 +54,12 @@ export default function FAQPage() {
                     a: "We accept all major payment methods powered securely by Razorpay: UPI (Google Pay, PhonePe, Paytm, BHIM), Credit/Debit Cards (Visa, MasterCard, RuPay), Net Banking (50+ banks), digital wallets, and Cash on Delivery (COD)."
                 },
                 {
-                    q: "Is it safe to pay online on Mariyae Kalin?",
+                    q: "Is it safe to pay online on Bhadohi Kaleen?",
                     a: "Yes, 100%. All online transactions are processed through Razorpay's PCI-DSS Level 1 certified gateway with 256-bit bank-grade SSL encryption. We do not store your card or banking credentials."
                 },
                 {
                     q: "What happens if money was debited but the order failed?",
-                    a: "In the rare event of a network disruption where money is deducted but your order isn't confirmed, Razorpay automatically initiates a refund back to your original payment source within 5 to 7 business days. You can also contact us at info@mariyae.com with your payment reference ID."
+                    a: "In the rare event of a network disruption where money is deducted but your order isn't confirmed, Razorpay automatically initiates a refund back to your original payment source within 5 to 7 business days. You can also contact us at contact@bhadohikaleen.com with your payment reference ID."
                 },
                 {
                     q: "Is Cash on Delivery (COD) available?",
@@ -80,7 +80,7 @@ export default function FAQPage() {
                 },
                 {
                     q: "How do I initiate a return?",
-                    a: "To start a return, please contact our support team at info@mariyae.com or call us at +91 7045932672. We will guide you through the verification and pickup process."
+                    a: "To start a return, please contact our support team at contact@bhadohikaleen.com or call us at +91 7045932672. We will guide you through the verification and pickup process."
                 }
             ]
         },
@@ -142,7 +142,7 @@ export default function FAQPage() {
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
                         <a
-                            href="mailto:info@mariyae.com"
+                            href="mailto:contact@bhadohikaleen.com"
                             className="px-8 py-3 bg-[#510c74] text-white rounded-full hover:bg-[#240334] transition-colors"
                         >
                             Email Us
