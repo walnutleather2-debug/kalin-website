@@ -100,7 +100,7 @@ export default function CheckoutSuccessPage() {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h3 className="font-semibold text-gray-900 mb-4">Customer Support</h3>
               <div className="space-y-2 text-sm text-gray-600">
-                <p>📧 Email: support@mariyae.com</p>
+                <p>📧 Email: contact@bhadohikaleen.com</p>
                 <p>📞 Phone: +91 7045932672</p>
                 <p>🕒 Hours: Mon-Sat 9AM-8PM IST</p>
               </div>
